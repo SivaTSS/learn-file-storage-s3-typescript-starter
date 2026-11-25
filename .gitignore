@@ -1,5 +1,9 @@
 *.db
 .env
+.env.*
+!.env.example
 assets/
 samples/
 node_modules/
+aws/
+*.zip

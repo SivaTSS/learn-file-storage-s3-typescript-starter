@@ -50,9 +50,14 @@ export async function handlerVideoGet(cfg: ApiConfig, req: BunRequest) {
     throw new BadRequestError("Invalid video ID");
   }
 
+  const token = getBearerToken(req.headers);
+  const userID = validateJWT(token, cfg.jwtSecret);
   const video = getVideo(cfg.db, videoId);
   if (!video) {
     throw new NotFoundError("Couldn't find video");
+  }
+  if (video.userID !== userID) {
+    throw new UserForbiddenError("Not authorized to view this video");
   }
 
   return respondWithJSON(200, video);
